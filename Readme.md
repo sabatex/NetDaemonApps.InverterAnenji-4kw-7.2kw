@@ -1,8 +1,7 @@
 # OpenESS (Anenji 4kw/7.2kw)
 
-A service that exports power consumption and other metrics from Chinese solar inverters over MQTT. It can be used as a replacement for proprietary [SmartESS mobile app](https://play.google.com/store/apps/details?id=com.eybond.smartclient.ess).
+An app that exports electricity consumption and other metrics from Chinese solar inverters to Home Assistant using the WiFi adapter attached to the inverters. [SmartESS mobile app](https://play.google.com/store/apps/details?id=com.eybond.smartclient.ess).
 
-In theory it can work with most inverters supported by SmartESS, but some inverters will probably require minor improvements/fixes in code -- see limitations.
 
 Thanks [Alexey Denisov](https://github.com/alexeyden/openess)
 
