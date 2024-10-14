@@ -1,9 +1,7 @@
 // Use unique namespaces for your apps if you going to share with others to avoid
 // conflicting names
 
-using Microsoft.Extensions.Logging;
 using NetDaemon.Extensions.MqttEntityManager;
-using NetDaemon.HassModel;
 using System;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
@@ -14,11 +12,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NetDaemonApps.Inverter.Anenji_4_7_WiFi;
 
-public class Anenji4_7
+namespace InverterAnenji;
+
+
+[NetDaemonApp]
+public class Anenji4000App: IAsyncInitializable
 {
-    readonly ILogger _logger;
+    readonly ILogger<Anenji4000App> _logger;
     readonly int localPort = 8899;
     readonly IHaContext ha;
     readonly  IMqttEntityManager entityManager;
@@ -27,42 +28,35 @@ public class Anenji4_7
     InverterState inverterState = new InverterState();
     IPEndPoint WiFiAdapterEndPoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 1, 128 }), 58899);
     Task? _worker = null;
-
-
-    public Anenji4_7(IHaContext ha,ILogger logger, IMqttEntityManager entityManager)
-    {
-        _logger = logger;
-        this.ha = ha;
-        this.entityManager = entityManager;
-    }
+    CancellationToken _cancellationToken = new CancellationToken();
 
     public async Task InitialConnection()
     {
-                try
-                {
-                    using (var udp = new UdpClient())
-                    {
+        try
+        {
+            using (var udp = new UdpClient())
+            {
 
-                        udp.Connect(WiFiAdapterEndPoint);
-                        var ip = new IPAddress(new byte[] { 192, 168, 1, 100 });
-                        var message = $"set>server={ip}:{localPort};";
-                        _logger.LogInformation(message);
-                        udp.Send(Encoding.ASCII.GetBytes(message));
-                        var result = await udp.ReceiveAsync().WaitAsync(TimeSpan.FromSeconds(2));
-                        var str = Encoding.ASCII.GetString(result.Buffer);
-                        if (str.Contains("rsp>server="))
-                        {
-                            serverNumber = str.Substring(11, str.IndexOf(";") - 11);
-                        }
-                        _logger.LogInformation(str);
-                        udp.Close();
-                    }
-                }
-                catch (Exception ex) 
+                udp.Connect(WiFiAdapterEndPoint);
+                var ip = new IPAddress(new byte[] { 192, 168, 1, 100 });
+                var message = $"set>server={ip}:{localPort};";
+                _logger.LogInformation(message);
+                udp.Send(Encoding.ASCII.GetBytes(message));
+                var result = await udp.ReceiveAsync().WaitAsync(TimeSpan.FromSeconds(2));
+                var str = Encoding.ASCII.GetString(result.Buffer);
+                if (str.Contains("rsp>server="))
                 {
-                    _logger.LogError($"Do not execute udp initializer with  error: {ex.Message}");
-                
+                    serverNumber = str.Substring(11, str.IndexOf(";") - 11);
                 }
+                _logger.LogInformation(str);
+                udp.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Do not execute udp initializer with  error: {ex.Message}");
+
+        }
     }
 
 
@@ -70,14 +64,14 @@ public class Anenji4_7
     {
         byte[] buffer = new byte[1024];
         ushort funcCode = 201;
-        var query = new QueryModBus() { TID=_messageCounter,DevCode=ushort.Parse(serverNumber),Count=34,RegisterId=funcCode};
+        var query = new QueryModBus() { TID = _messageCounter, DevCode = ushort.Parse(serverNumber), Count = 34, RegisterId = funcCode };
         var message = query.GetBytes().ToArray();
         try
         {
             await con.SendAsync(message).WaitAsync(TimeSpan.FromSeconds(2));
             _logger.LogInformation($"Exchange iteration {_messageCounter}");
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             _logger.LogError($"Do not send message with error:{ex.Message}");
             return false;
@@ -140,7 +134,7 @@ public class Anenji4_7
 
     }
 
-    public async Task ExchangeServer(CancellationToken? cancellationToken=null)
+    public async Task ExchangeServer(CancellationToken? cancellationToken = null)
     {
         do
         {
@@ -244,5 +238,25 @@ public class Anenji4_7
 
         } while (!(cancellationToken ?? CancellationToken.None).IsCancellationRequested);
     }
+
+
+    public async Task InitializeAsync(CancellationToken cancellationToken)
+    {
+        await inverterState.CreateSensors(entityManager);
+        _worker = Task.Run(async () =>
+        {
+           var exch =  ExchangeServer(_cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(10));
+        });
+    }
+
+    public Anenji4000App(IHaContext ha,ILogger<Anenji4000App> logger, IMqttEntityManager entityManager)
+    {
+        _logger = logger;
+        this.ha = ha;
+        this.entityManager = entityManager;
+    }
+
+    
 
 }

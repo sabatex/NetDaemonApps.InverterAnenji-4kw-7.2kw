@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace NetDaemonApps.Inverter.Anenji_4_7_WiFi;
+namespace InverterAnenji;
 
 public class InverterState
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetDaemonApps.Inverter.Anenji_4_7_WiFi;
+namespace InverterAnenji;
 
 public static class StreamExtensions
 {
