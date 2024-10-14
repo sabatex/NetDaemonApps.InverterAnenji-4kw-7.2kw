@@ -21,45 +21,15 @@ public class Anenji4000App: IAsyncInitializable
 {
     readonly ILogger<Anenji4000App> _logger;
     readonly int localPort = 8899;
+    IPEndPoint WiFiAdapterEndPoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 1, 128 }), 58899);
+    IPAddress haIpAddress = new IPAddress(new byte[] { 192, 168, 1, 100 });
     readonly IHaContext ha;
     readonly  IMqttEntityManager entityManager;
     ushort _messageCounter=1;
     string? serverNumber;
     InverterState inverterState = new InverterState();
-    IPEndPoint WiFiAdapterEndPoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 1, 128 }), 58899);
-    Task? _worker = null;
+     Task? _worker = null;
     CancellationToken _cancellationToken = new CancellationToken();
-
-    public async Task InitialConnection()
-    {
-        try
-        {
-            using (var udp = new UdpClient())
-            {
-
-                udp.Connect(WiFiAdapterEndPoint);
-                var ip = new IPAddress(new byte[] { 192, 168, 1, 100 });
-                var message = $"set>server={ip}:{localPort};";
-                _logger.LogInformation(message);
-                udp.Send(Encoding.ASCII.GetBytes(message));
-                var result = await udp.ReceiveAsync().WaitAsync(TimeSpan.FromSeconds(2));
-                var str = Encoding.ASCII.GetString(result.Buffer);
-                if (str.Contains("rsp>server="))
-                {
-                    serverNumber = str.Substring(11, str.IndexOf(";") - 11);
-                }
-                _logger.LogInformation(str);
-                udp.Close();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Do not execute udp initializer with  error: {ex.Message}");
-
-        }
-    }
-
-
     async Task<bool> ReadRegisters(Socket con)
     {
         byte[] buffer = new byte[1024];
@@ -153,8 +123,7 @@ public class Anenji4000App: IAsyncInitializable
                     {
                         _logger.LogError($"Error udp connect: {ex.Message}");
                     }
-                    var ip = new IPAddress(new byte[] { 192, 168, 1, 100 });
-                    var message = $"set>server={ip}:{localPort};";
+                     var message = $"set>server={haIpAddress}:{localPort};";
                     _logger.LogInformation(message);
                     udp.Send(Encoding.ASCII.GetBytes(message));
                     var result = await udp.ReceiveAsync().WaitAsync(TimeSpan.FromSeconds(2));
