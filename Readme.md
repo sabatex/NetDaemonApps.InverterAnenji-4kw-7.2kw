@@ -27,7 +27,9 @@ dotnet new nd-project
     IPAddress haIpAddress = new IPAddress(new byte[] { 192, 168, 1, 100 });
 
 ```
-7. Run debug or publish to HA.
+7. In the NetDaemon configuration tab in the network configuration area, change port <b>10000</b> to <b>8899</b>.
+
+8. Run debug or publish to HA.
 
 ## P.S.
 
