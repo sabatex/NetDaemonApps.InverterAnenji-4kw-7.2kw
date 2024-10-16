@@ -1,4 +1,5 @@
-﻿using NetDaemon.Extensions.MqttEntityManager;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using NetDaemon.Extensions.MqttEntityManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,13 +51,22 @@ public class InverterState
     public float InverterChargingAverageCurrent { get; set; }
     public float PVChargingAverageCurrent { get; set; }
 
+    public OutputPriority OutputPriority { get; set; } = OutputPriority.UTIL;
+    public OutputPriority OutputPriorityHA { get; set; } = OutputPriority.UTIL;
 
-     object stateTopic = "homeassistant/sensor/inverter_anenji4000/state";
-     object device = new { identifiers = new[] { "inverter_anenji4000" }, name = "OffGrid Inverter Anenji", model = "anj-4kW-24V", manufacturer = "Anennji" };
+    public BatteryChargingPriority BatteryChargingPriority { get; set; } = BatteryChargingPriority.PVIsAtTheSameLevelAsTheUtility;
+    public BatteryChargingPriority BatteryChargingPriorityHA { get; set; } = BatteryChargingPriority.PVIsAtTheSameLevelAsTheUtility;
+    public  bool IsAccesible { get; set; }
+
+
+    object stateTopic = "homeassistant/sensor/inverter_anenji4000/state";
+    object selectstateTopic = "homeassistant/select/inverter_anenji4000/state";
+    object device = new { identifiers = new[] { "inverter_anenji4000" }, name = "OffGrid Inverter Anenji", model = "anj-4kW-24V", manufacturer = "Anennji" };
+
+
 
     public InverterState()
     {
-        
     }
 
 
@@ -398,7 +408,46 @@ public class InverterState
             device
         });
 
+
+        // select 301
+        await  entityManager.CreateAsync("select.inverter_anenji4000_output_priority", new EntityCreationOptions
+        {
+            Name = "Output Priority"
+        }, new
+        {
+            options = Enum.GetNames(typeof(OutputPriority)),
+            
+            icon = "mdi:list-status",
+            state_topic = selectstateTopic,
+            value_template = "{{ value_json.output_priority}}",
+            device
+        }).ConfigureAwait(false);
+        (await entityManager.PrepareCommandSubscriptionAsync("select.inverter_anenji4000_output_priority").ConfigureAwait(false))
+        .Subscribe(new Action<string>(state =>
+        {
+            OutputPriorityHA = OutputPriority.Parse<OutputPriority>( state);
+        }));
+        // select 331
+        
+        await entityManager.CreateAsync("select.inverter_anenji4000_battery_charging_priority", new EntityCreationOptions
+        {
+            Name = "Battery charging priority",
+        }, new
+        {
+            options = Enum.GetNames(typeof(BatteryChargingPriority)),
+            icon = "mdi:list-status",
+            state_topic = selectstateTopic,
+            value_template = "{{ value_json.battery_charging_priority}}",
+            device
+        }).ConfigureAwait(false);
+        (await entityManager.PrepareCommandSubscriptionAsync("select.inverter_anenji4000_battery_charging_priority").ConfigureAwait(false))
+.Subscribe(new Action<string>(state =>
+{
+    BatteryChargingPriorityHA = BatteryChargingPriority.Parse<BatteryChargingPriority>(state);
+}));
+
     }
+
 
 
     public async Task SendMQTT(IMqttEntityManager entityManager)
@@ -432,14 +481,11 @@ public class InverterState
             batery_percentage = BatteryPercentage,
             batery_average_current = BatteryAverageCurrent,
             inverter_charging_current = InverterChargingAverageCurrent,
-            pv_charging_current=PVChargingAverageCurrent
-
-
+            pv_charging_current=PVChargingAverageCurrent,
         };
 
 
         await entityManager.SetStateAsync("sensor.inverter_anenji4000", JsonSerializer.Serialize(newState));
-
     }
 
 

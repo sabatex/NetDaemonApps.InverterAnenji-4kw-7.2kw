@@ -36,21 +36,25 @@ public class QueryModBus
         UInt16 Count = stream.GetUInt16();       //12;
     }
 
-    IEnumerable<byte> GetMessageFrame()
+    IEnumerable<byte> GetMessageFrame(byte[]? Additional_bytes)
     {
         yield return DeviceId;
         yield return Function;
         var bytes = BitConverter.GetBytes(RegisterId).Reverse().ToArray();
         yield return bytes[0];
         yield return bytes[1];
-        bytes = BitConverter.GetBytes(Count).Reverse().ToArray(); ;
+        bytes = BitConverter.GetBytes(Count).Reverse().ToArray();
         yield return bytes[0];
         yield return bytes[1];
+        if (Additional_bytes != null)
+        {
+            foreach (byte b in Additional_bytes) yield return b;
+        }
 
     }
 
 
-    public IEnumerable<byte> GetBytes()
+    public IEnumerable<byte> GetBytes(byte[]? additionalBytes=null)
     {
         var bytes = BitConverter.GetBytes(TID).Reverse().ToArray(); ;
         yield return bytes[0];
@@ -63,7 +67,7 @@ public class QueryModBus
         yield return bytes[1];
         yield return DevAdr;
         yield return FuncCode;
-        var message = GetMessageFrame();
+        var message = GetMessageFrame(additionalBytes);
         var CRC = ModRTU_CRC(message);
         foreach (byte b in message)
         {
