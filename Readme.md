@@ -37,6 +37,6 @@ dotnet new nd-project
 
 The Application, once launched, automatically registers the <b> OffGrid Inverter Anenji </b> device with all registers [201-234]( https://github.com/HotNoob/PythonProtocolGateway/blob/main/protocols/eg4/eg4_3000ehv_v1.holding_registry_map.csv ).
 
-After successful integration to Home Assistant recomendation close access to internet for WiFi doundle. (Increases connection stability)
+After successful integration to Home Assistant recomendation close access to internet for WiFi doungle. (Increases connection stability)
  
  
