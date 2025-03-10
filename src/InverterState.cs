@@ -84,6 +84,7 @@ public class InverterState
             device
         });
         #region GRID
+        // Voltage
         await entityManager.CreateAsync("sensor.inverter_anenji4000_grid_voltage", new EntityCreationOptions
         {
             Name = "Grid voltage",
@@ -95,6 +96,7 @@ public class InverterState
             value_template = "{{ value_json.grid_voltage }}",
             device
         });
+        // Frequency
         await entityManager.CreateAsync("sensor.inverter_anenji4000_grid_frequency", new EntityCreationOptions
         {
             Name = "Grid Frequency",
@@ -106,13 +108,14 @@ public class InverterState
             value_template = "{{ value_json.grid_frequency }}",
             device
         });
+        // Power
         await entityManager.CreateAsync("sensor.anenji4000_grid_load_power", new EntityCreationOptions
         {
             Name = "Grid Load power",
             DeviceClass = "Power"
         }, new 
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.grid_power }}",
             device
@@ -120,6 +123,7 @@ public class InverterState
         });
         #endregion
         #region Inverter
+        //Voltage
         await entityManager.CreateAsync("sensor.inverter_anenji4000_inverter_voltage", new EntityCreationOptions
         {
             Name = "Inverter voltage",
@@ -131,6 +135,7 @@ public class InverterState
             value_template = "{{ value_json.inverter_voltage }}",
             device
         });
+        //Current
         await entityManager.CreateAsync("sensor.inverter_anenji4000_inverter_current", new EntityCreationOptions
         {
             Name = "Inverter current",
@@ -142,6 +147,7 @@ public class InverterState
             value_template = "{{ value_json.inverter_current }}",
             device
         });
+        //Frequency
         await entityManager.CreateAsync("sensor.inverter_anenji4000_inverter_frequency", new EntityCreationOptions
         {
             Name = "Inverter Frequency",
@@ -153,25 +159,27 @@ public class InverterState
             value_template = "{{ value_json.inverter_frequency }}",
             device
         });
+        //Power
         await entityManager.CreateAsync("sensor.anenji4000_inverter_power", new EntityCreationOptions
         {
             Name = "Inverter Load power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.inverter_power }}",
             device
 
         });
+        //Charging Power
         await entityManager.CreateAsync("sensor.anenji4000_inverter_charging_power", new EntityCreationOptions
         {
             Name = "Inverter charging power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.inverter_charging_power }}",
             device
@@ -179,6 +187,7 @@ public class InverterState
         });
         #endregion
         #region Output
+        //Voltage
         await entityManager.CreateAsync("sensor.inverter_anenji4000_output_voltage", new EntityCreationOptions
         {
             Name = "Output voltage",
@@ -190,10 +199,11 @@ public class InverterState
             value_template = "{{ value_json.output_voltage }}",
             device
         });
+        //Current
         await entityManager.CreateAsync("sensor.inverter_anenji4000_output_current", new EntityCreationOptions
         {
             Name = "Output current",
-            DeviceClass = "VOLTAGE"
+            DeviceClass = "CURRENT"
         }, new
         {
             unit_of_measurement = "A",
@@ -201,6 +211,7 @@ public class InverterState
             value_template = "{{ value_json.output_current }}",
             device
         });
+        //Frequency
         await entityManager.CreateAsync("sensor.inverter_anenji4000_output_frequency", new EntityCreationOptions
         {
             Name = "Output Frequency",
@@ -212,18 +223,20 @@ public class InverterState
             value_template = "{{ value_json.output_frequency }}",
             device
         });
+        //Power
         await entityManager.CreateAsync("sensor.anenji4000_output_power", new EntityCreationOptions
         {
             Name = "Output power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.output_power }}",
             device
 
         });
+        //apparent power
         await entityManager.CreateAsync("sensor.anenji4000_output_apparent_power", new EntityCreationOptions
         {
             Name = "Output apparent power",
@@ -239,6 +252,7 @@ public class InverterState
         #endregion
 
         #region Batery
+        //Voltage
         await entityManager.CreateAsync("sensor.inverter_anenji4000_batery_voltage", new EntityCreationOptions
         {
             Name = "Batery voltage",
@@ -250,6 +264,7 @@ public class InverterState
             value_template = "{{ value_json.batery_voltage}}",
             device
         });
+        //Current
         await entityManager.CreateAsync("sensor.inverter_anenji4000_batery_current", new EntityCreationOptions
         {
             Name = "Batery current",
@@ -261,13 +276,14 @@ public class InverterState
             value_template = "{{ value_json.batery_current }}",
             device
         });
+        //Power
         await entityManager.CreateAsync("sensor.anenji4000_batery_power", new EntityCreationOptions
         {
             Name = "Batery power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.batery_power }}",
             device
@@ -277,6 +293,7 @@ public class InverterState
         #endregion
 
         #region PV
+        //Voltage
         await entityManager.CreateAsync("sensor.inverter_anenji4000_pv_voltage", new EntityCreationOptions
         {
             Name = "PV voltage",
@@ -288,10 +305,11 @@ public class InverterState
             value_template = "{{ value_json.pv_voltage}}",
             device
         });
+        //Current
         await entityManager.CreateAsync("sensor.inverter_anenji4000_pv_current", new EntityCreationOptions
         {
             Name = "PV current",
-            DeviceClass = "VOLTAGE"
+            DeviceClass = "CURRENT"
         }, new
         {
             unit_of_measurement = "A",
@@ -299,25 +317,27 @@ public class InverterState
             value_template = "{{ value_json.pv_current }}",
             device
         });
+        //Power
         await entityManager.CreateAsync("sensor.anenji4000_pv_power", new EntityCreationOptions
         {
             Name = "PV power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.pv_power }}",
             device
 
         });
+        //Charging Power
         await entityManager.CreateAsync("sensor.anenji4000_pv_charging_power", new EntityCreationOptions
         {
             Name = "PV charging power",
             DeviceClass = "Power"
         }, new
         {
-            unit_of_measurement = "w",
+            unit_of_measurement = "W",
             state_topic = stateTopic,
             value_template = "{{ value_json.pv_charging_power }}",
             device
@@ -344,7 +364,7 @@ public class InverterState
             DeviceClass = "Temperature"
         }, new
         {
-            unit_of_measurement = "C",
+            unit_of_measurement = "°C",
             state_topic = stateTopic,
             value_template = "{{ value_json.dcdc_temperature}}",
             device
@@ -356,7 +376,7 @@ public class InverterState
             DeviceClass = "Temperature"
         }, new
         {
-            unit_of_measurement = "C",
+            unit_of_measurement = "°C",
             state_topic = stateTopic,
             value_template = "{{ value_json.inverter_temperature}}",
             device
@@ -409,8 +429,8 @@ public class InverterState
         });
 
 
-        // select 301
-        await  entityManager.CreateAsync("select.inverter_anenji4000_output_priority", new EntityCreationOptions
+        // select 301 Output Priority
+        await entityManager.CreateAsync("select.inverter_anenji4000_output_priority", new EntityCreationOptions
         {
             Name = "Output Priority"
         }, new
@@ -427,8 +447,8 @@ public class InverterState
         {
             OutputPriorityHA = OutputPriority.Parse<OutputPriority>( state);
         }));
-        // select 331
-        
+
+        // select 331 Battery charging priority
         await entityManager.CreateAsync("select.inverter_anenji4000_battery_charging_priority", new EntityCreationOptions
         {
             Name = "Battery charging priority",
@@ -441,10 +461,10 @@ public class InverterState
             device
         }).ConfigureAwait(false);
         (await entityManager.PrepareCommandSubscriptionAsync("select.inverter_anenji4000_battery_charging_priority").ConfigureAwait(false))
-.Subscribe(new Action<string>(state =>
-{
-    BatteryChargingPriorityHA = BatteryChargingPriority.Parse<BatteryChargingPriority>(state);
-}));
+        .Subscribe(new Action<string>(state =>
+        {
+        BatteryChargingPriorityHA = BatteryChargingPriority.Parse<BatteryChargingPriority>(state);
+        }));
 
     }
 
