@@ -28,8 +28,32 @@ dotnet new nd-project
 
 ```
 7. In the NetDaemon configuration tab in the network configuration area, change port <b>10000</b> to <b>8899</b>.
+8. Modify Program.cs 
+``` C#
+   // Program.cs
+   await Host.CreateDefaultBuilder(args)
+        .UseNetDaemonAppSettings()
+        .UseNetDaemonDefaultLogging()
+        .UseNetDaemonRuntime()
+        .UseNetDaemonTextToSpeech()
+        // add for mqtt
+        .UseNetDaemonMqttEntityManagement() 
+        // #8
+        .ConfigureServices((_, services) =>
+            services
+                .AddAppsFromAssembly(Assembly.GetExecutingAssembly())
+                .AddNetDaemonStateManager()
+                .AddNetDaemonScheduler()
+                // Add next line if using code generator
+                .AddHomeAssistantGenerated()
+        )
+        .Build()
+        .RunAsync()
+        .ConfigureAwait(false);
+```
+issue: [MQTT error #8](https://github.com/sabatex/NetDaemonApps.InverterAnenji-4kw-7.2kw/issues/8)
 
-8. Run debug or publish to HA.
+9. Run debug or publish to HA.
 
  
 
