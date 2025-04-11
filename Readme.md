@@ -62,5 +62,7 @@ issue: [MQTT error #8](https://github.com/sabatex/NetDaemonApps.InverterAnenji-4
 The Application, once launched, automatically registers the <b> OffGrid Inverter Anenji </b> device with all registers [201-234]( https://github.com/HotNoob/PythonProtocolGateway/blob/main/protocols/eg4/eg4_3000ehv_v1.holding_registry_map.csv ).
 
 After successful integration to Home Assistant recomendation close access to internet for WiFi doungle. (Increases connection stability)
+
+If someone writes a more detailed instruction or makes a video on YouTube, it would be welcomed.
  
  
