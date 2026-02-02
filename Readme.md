@@ -20,6 +20,33 @@ cd NetDaemonApps
 dotnet new nd-project
 ```
 
+  If you use the NetDaemon project template you will already have the entity manager available and you can skip this setup.
+  To set up the entity manager manually you should:
+  Include the NetDaemon.Extensions.MqttEntityManager NuGet package:
+``` powershell
+dotnet add package NetDaemon.Extensions.Mqtt
+```
+
+Update your appsettings.json with a new section:
+
+``` C#
+{
+  "Logging": {
+    // more config
+  },
+  "NetDaemon": {
+    // more config
+  },
+  "Mqtt": {
+    "Host": "ENTER YOUR IP TO your MQTT Broker",
+    "Port": "ENTER YOUR PORT TO your MQTT Broker (default 1883)",
+    "UserName": "Enter your MQTT broker USERNAME",
+    "Password": "Enter your MQTT broker PASSWORD",
+    "DiscoveryPrefix": "MQTT broker discovery rrefix (default homeassistant)"
+  }
+}
+```
+
 4. In solution explorer navigate to folder <b>apps/HasModel</b> and create application folder <b>Anenji Inverter</b>.
 
 5. In folder click left mouse button and select <b>add existig items</b>, choise all *.cs files from src folder,click on <b>Add</b>'s button drop-down menu and choose <b>Add as a link</b>
