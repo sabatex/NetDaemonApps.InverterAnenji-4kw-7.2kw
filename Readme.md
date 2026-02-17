@@ -1,3 +1,8 @@
+**Updated filters, so you need to use instruction below. 
+Youtube video will be added**
+
+
+
 # OpenESS (Anenji 4kw/7.2kw)
 
 An app that exports electricity consumption and other metrics from Chinese solar inverters to Home Assistant using the WiFi adapter attached to the inverters. [SmartESS mobile app](https://play.google.com/store/apps/details?id=com.eybond.smartclient.ess).

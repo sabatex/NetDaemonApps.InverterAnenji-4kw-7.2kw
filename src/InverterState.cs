@@ -69,6 +69,49 @@ public class InverterState
     {
     }
 
+    /// <summary>
+    /// Створює повну копію поточного стану інвертора
+    /// </summary>
+    public InverterState Clone()
+    {
+        return new InverterState
+        {
+            WorkingMode = this.WorkingMode,
+            GridVoltage = this.GridVoltage,
+            GridFrequency = this.GridFrequency,
+            GridLoadPower = this.GridLoadPower,
+            InverterVoltage = this.InverterVoltage,
+            InverterCurrent = this.InverterCurrent,
+            InverterFrequency = this.InverterFrequency,
+            InverterPower = this.InverterPower,
+            InverterChargingPower = this.InverterChargingPower,
+            OutputVoltage = this.OutputVoltage,
+            OutputCurrent = this.OutputCurrent,
+            OutputFrequency = this.OutputFrequency,
+            OutputPower = this.OutputPower,
+            OutputApparentPower = this.OutputApparentPower,
+            BatteryVoltage = this.BatteryVoltage,
+            BatteryCurrent = this.BatteryCurrent,
+            BatteryPower = this.BatteryPower,
+            PVVoltage = this.PVVoltage,
+            PVCurrent = this.PVCurrent,
+            PVPower = this.PVPower,
+            PVChargingPower = this.PVChargingPower,
+            LoadPercentage = this.LoadPercentage,
+            DCDCTemperature = this.DCDCTemperature,
+            InverterTemperature = this.InverterTemperature,
+            BatteryPercentage = this.BatteryPercentage,
+            BatteryAverageCurrent = this.BatteryAverageCurrent,
+            InverterChargingAverageCurrent = this.InverterChargingAverageCurrent,
+            PVChargingAverageCurrent = this.PVChargingAverageCurrent,
+            OutputPriority = this.OutputPriority,
+            OutputPriorityHA = this.OutputPriorityHA,
+            BatteryChargingPriority = this.BatteryChargingPriority,
+            BatteryChargingPriorityHA = this.BatteryChargingPriorityHA,
+            IsAccesible = this.IsAccesible
+        };
+    }
+
 
     public async Task CreateSensors(IMqttEntityManager entityManager)
     {
